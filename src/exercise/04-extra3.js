@@ -6,11 +6,10 @@ import { useLocalStorageState } from '../utils';
 
 const initialStep = Array(9).fill(null)
 function Board() {
-  // 🐨 squares is the state for this component. Add useState for squares
-  const [squares, setSquares] = useLocalStorageState('squares', initialStep)
   const [history, setHistory] = useLocalStorageState('history', [initialStep])
-  const [currentStep, setCurentStep] = useLocalStorageState('currentStep', 0)
+  const [currentStep, setCurrentStep] = useLocalStorageState('currentStep', 0)
 
+  let squares = history[currentStep]
   let nextValue = calculateNextValue(squares)
   let winner = calculateWinner(squares)
   let status = calculateStatus(winner, squares, nextValue)
@@ -25,16 +24,13 @@ function Board() {
     let squaresCopy = [...squares]
 
     squaresCopy[square] = nextValue
-
-    setSquares(squaresCopy)
-    setHistory([...history, squaresCopy])
-    setCurentStep((prev)=>prev+1)
+    setHistory([...history.slice(0, currentStep + 1), squaresCopy])
+    setCurrentStep((prev)=>prev+1)
   }
 
   function restart() {
-    setSquares(initialStep)
     setHistory([initialStep])
-    setCurentStep(0)
+    setCurrentStep(0)
   }
 
   function renderSquare(i) {
@@ -74,8 +70,7 @@ function Board() {
       </div>
       <ul>{history.map((step, i) => <li key={history[i]}>
         <button disabled={currentStep === i} onClick={() => {
-          setCurentStep(i)
-          setSquares(history[i])
+          setCurrentStep(i)
         }} >
           {`go to ${i===0 ? 'start' : i}`}
         </button>
