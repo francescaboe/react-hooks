@@ -28,11 +28,13 @@ function Board() {
 
     setSquares(squaresCopy)
     setHistory([...history, squaresCopy])
+    setCurentStep((prev)=>prev+1)
   }
 
   function restart() {
     setSquares(initialStep)
     setHistory([initialStep])
+    setCurentStep(0)
   }
 
   function renderSquare(i) {
@@ -71,7 +73,10 @@ function Board() {
         </button>
       </div>
       <ul>{history.map((step, i) => <li key={history[i]}>
-        <button disabled={history[i] === squares} onClick={() => setSquares(history[i])} >
+        <button disabled={currentStep === i} onClick={() => {
+          setCurentStep(i)
+          setSquares(history[i])
+        }} >
           {`go to ${i===0 ? 'start' : i}`}
         </button>
       </li>)}
