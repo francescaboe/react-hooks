@@ -31,7 +31,6 @@ function Board() {
 
   const restart = () => {
     setSquares(Array(9).fill(null))
-    updateLocalStorage()
   }
 
   React.useEffect(()=>{
